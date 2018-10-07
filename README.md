@@ -8,4 +8,4 @@ Twitter feed and simple sentiment analysis
 cd twitter_realtime_sentiment
 pip install -r requirements.txt
 ```
-### Update the di_de/pyscript/common_config.py file with DB connection and data_dir
+### Update the twitter_realtime_sentiment/config.py file necessary information
