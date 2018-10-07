@@ -1,0 +1,5 @@
+awscli==1.16.20
+boto3==1.9.11
+botocore==1.12.11
+textblob==0.15.1
+tweepy==3.6.0
