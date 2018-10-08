@@ -6,6 +6,6 @@ Twitter feed and simple sentiment analysis
 ### Set up environment
 ```shell
 cd twitter_realtime_sentiment
-pip install -r requirements.txt
+sudo pip install -r requirements.txt
 ```
 ### Update the twitter_realtime_sentiment/config.py file necessary information
