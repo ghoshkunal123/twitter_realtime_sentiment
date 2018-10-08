@@ -10,3 +10,13 @@ cd twitter_realtime_sentiment
 sudo python3 -m pip install -r requirements.txt
 ```
 ### Update the twitter_realtime_sentiment/config.py file necessary information
+```shell
+# Configuration to run the job
+ckey=""
+csecret=""
+atoken=""
+asecret=""
+bucket_name=''
+bucekt_prefix=''
+kinesis_stream=''
+```
