@@ -5,8 +5,8 @@ Twitter feed and simple sentiment analysis
 ### [Clone project](https://github.com/ghoshkunal123/twitter_realtime_sentiment)
 ### Set up environment
 ```shell
-sudo pip install --upgrade pip
+sudo python3 -m pip install --upgrade pip
 cd twitter_realtime_sentiment
-sudo pip install -r requirements.txt
+sudo python3 -m pip install -r requirements.txt
 ```
 ### Update the twitter_realtime_sentiment/config.py file necessary information
