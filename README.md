@@ -29,7 +29,8 @@ bucekt_prefix=''
 kinesis_stream=''
 track=[]
 ```
-### Open Athena in AWS Console and run the sql in twitter_realtime_sentiment/sql/Athena_KunalAWSSentiment_KunalAWSSentimentawscloud.sql
+### Open Athena in AWS Console 
+Run the sql in twitter_realtime_sentiment/sql/Athena_KunalAWSSentiment_KunalAWSSentimentawscloud.sql
 
 ### Create a lambda function f_msck_repair_table_KunalAWSSentimentawscloud
 Copy the code from twitter_realtime_sentiment/lambda/f_msck_repair_table_KunalAWSSentimentawscloud
