@@ -1,23 +1,28 @@
-SELECT id
-,lang
-,sentiments
-,regexp_extract(source,'.(>)([\w+\s+]+)(</a>)',2) access_from_app
-,user.id user_id
-,user.name user_name
-,user.screen_name user_screen_name
-,user.location user_location
-,user.description user_description
-,user.followers_count user_followers_count
-,user.friends_count user_friends_count
-,user.listed_count user_listed_count
-,user.favourites_count user_favourites_count
-,user.statuses_count user_statuses_count
-,user.lang user_lang
+select ts.id
+,ts.sentiments
+,regexp_extract(ts.source,'.(>)([\w+\s+]+)(</a>)',2) access_from_app
+,ts.user.id user_id
+,ts.user.name user_name
+,ts.user.screen_name user_screen_name
+,ht.hashtags_text hashtags_text
+,um.user_mentions_screen_name user_mentions_screen_name
+,um.user_mentions_name user_mentions_name
+,ts.text
+from "kunalawssentiment"."kunalawssentimentawscloud" ts
+left join
+(select id
 ,hashtags_text.text hashtags_text
+from "kunalawssentiment"."kunalawssentimentawscloud"
+cross join unnest(entities.hashtags) as t(hashtags_text)
+where dt=format_datetime(current_timestamp,'YYYY-MM-dd')) ht
+on ts.id = ht.id
+left join
+(select id
 ,user_mentions_name.screen_name user_mentions_screen_name
 ,user_mentions_name.name user_mentions_name
-,text
 from "kunalawssentiment"."kunalawssentimentawscloud"
 cross join unnest(entities.hashtags) as t(hashtags_text)
 cross join unnest(entities.user_mentions) as t(user_mentions_name)
-where dt=format_datetime(current_timestamp,'YYYY-MM-dd');
+where dt=format_datetime(current_timestamp,'YYYY-MM-dd')) um
+on ts.id = um.id
+where ts.dt=format_datetime(current_timestamp,'YYYY-MM-dd');
