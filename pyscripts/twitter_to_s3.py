@@ -28,7 +28,7 @@ class listener(StreamListener):
         #print(get_tweet(all_data))
         # Send to s3
         try:
-            s3 = boto3.resource('s3', 'us-east-1')
+            s3 = boto3.resource('s3', region)
             object = s3.Object(bucket_name,os.path.join(bucekt_prefix,bucekt_prefix_add,filename))
             object.put(Body=json.dumps(get_tweet(all_data)))
         except botocore.exceptions.ClientError as e:
@@ -48,4 +48,4 @@ auth=OAuthHandler(ckey, csecret)
 auth.set_access_token(atoken, asecret)
 
 twitterStream = Stream(auth, listener())
-twitterStream.filter(track=["awscloud"])
+twitterStream.filter(track)
