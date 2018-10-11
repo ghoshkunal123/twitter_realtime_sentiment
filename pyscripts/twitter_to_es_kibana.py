@@ -47,7 +47,7 @@ class listener(StreamListener):
                 es.indices.create(index=es_index, ignore=[400, 404])
                 #print('Passes index creation')
             except ElasticsearchException as es2:
-                #print('Failed to create index.')
+                print('Failed to create index.')
 
         try:
             es.index(index=es_index, doc_type=es_index_doc_type, body=get_tweet(all_data))
