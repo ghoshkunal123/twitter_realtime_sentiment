@@ -76,7 +76,7 @@ Create an elastic search domain named kunalawssentiment-awscloud with number of 
 ### Run the script twitter_to_es_kibana.py
 ```shell
 cd /twitter_realtime_sentiment/pyscripts
-nohup twitter_to_es_kibana.py &
+nohup python3 twitter_to_es_kibana.py &
 ```
 
 ### Search and visualize the dashboard on Kibana
