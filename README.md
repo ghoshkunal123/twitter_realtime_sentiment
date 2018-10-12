@@ -80,3 +80,4 @@ nohup python3 twitter_to_es_kibana.py &
 ```
 
 ### Search and visualize the dashboard on Kibana
+Open Kibana and discover the data to begin with, create visualization and add them to dashboard.
