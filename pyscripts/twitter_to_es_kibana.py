@@ -9,7 +9,7 @@ On 10/09/2018 created the first version
 from tweepy import Stream
 from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
-from tweet_util import get_tweet
+from tweet_util import get_tweet_curated
 from config import *
 import json
 import boto3
@@ -25,8 +25,8 @@ class listener(StreamListener):
 
     def on_data(self, data):
         all_data = json.loads(data)
-        #print(get_tweet(all_data))
-        #print(type(get_tweet(all_data)))
+        #print(get_tweet_curated(all_data))
+        #print(type(get_tweet_curated(all_data)))
         # Send to elastic search
         try:
             credentials = boto3.Session().get_credentials()
@@ -37,8 +37,8 @@ class listener(StreamListener):
             awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, 'es',
                                session_token=credentials.token)
             es = Elasticsearch(hosts=[{'host': eshost, 'port': 443}], http_auth=awsauth, use_ssl=True,
-                               verify_certs=True, connection_class=RequestsHttpConnection)
-            print('Passes index connection')
+                               verify_certs=True, connection_class=RequestsHttpConnection, timeout=30, max_retries=10, retry_on_timeout=True)
+            #print('Passes index connection')
         except ElasticsearchException as es1:
             print('Error: Cannot connect to Elastic Search.')
 
@@ -50,7 +50,7 @@ class listener(StreamListener):
                 print('Failed to create index.')
 
         try:
-            es.index(index=es_index, doc_type=es_index_doc_type, body=get_tweet(all_data))
+            es.index(index=es_index, doc_type=es_index_doc_type, body=get_tweet_curated(all_data))
         except ElasticsearchException as es2:
             print('Failed posting to index.')
             print(str(es2))
