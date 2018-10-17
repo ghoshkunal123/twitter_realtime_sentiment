@@ -48,6 +48,8 @@ def _sentiment_analysis_by_emoticons(tweet):
         tweet['sentiments'] = Sentiments.POSITIVE
     elif Sentiments.NEGATIVE in tweet['sentiments']:
         tweet['sentiments'] = Sentiments.NEGATIVE
+    else:
+        tweet['sentiments'] = Sentiments.NEUTRAL
 
 
 def _sentiment_analysis_by_text(tweet):

@@ -41,6 +41,7 @@ Copy the code from twitter_realtime_sentiment/lambda/f_msck_repair_table_KunalAW
 Create an s3 trigger on Event Type ObjectCreated on s3 kunal-dl-stage and prefix KunalAWSSentiment-awscloud
 Choose the runtime environment as Python 3.6
 Make sure that msck repair table points to the right KunalAWSSentiment database and table KunalAWSSentimentawscloud
+Add a trigger to the lambda picking the above stated kinesis stream
 
 ### Create a lambda function f_stream_KunalAWSSentiment-awscloud_to_s3
 Copy the code from twitter_realtime_sentiment/lambda/f_stream_KunalAWSSentiment-awscloud_to_s3.py
@@ -128,5 +129,5 @@ Open Kibana and discover the data to begin with, create visualization and add th
 ### Housekeep Elastic Search index
 Schedule the script below in crontab to delete the elastic search index daily.
 ```shell
-0 0 * * * /usr/bin/python3 /home/ec2-user/environment/pyscripts/twitter_to_es_kibana.py
+0 0 * * * /usr/bin/python3 /home/ec2-user/environment/pyscripts/delete_es_index.py
 ```
