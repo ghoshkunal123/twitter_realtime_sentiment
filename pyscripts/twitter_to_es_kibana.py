@@ -4,6 +4,7 @@ Updated on
 Authored by Kunal Ghosh
 Purpose is to stream data from twitter stream API to Elastic Search
 On 10/09/2018 created the first version
+On 10/17/2018 made more changes
 '''
 
 from tweepy import Stream
