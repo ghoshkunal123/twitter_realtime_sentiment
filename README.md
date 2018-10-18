@@ -129,5 +129,6 @@ Open Kibana and discover the data to begin with, create visualization and add th
 ### Housekeep Elastic Search index
 Schedule the script below in crontab to delete the elastic search index daily.
 ```shell
-0 0 * * * /usr/bin/python3 /home/ec2-user/environment/pyscripts/delete_es_index.py
+59 23 * * * /usr/bin/python3 /home/ec2-user/environment/pyscripts/delete_es_index.py
+0 0 * * * /usr/bin/python3 /home/ec2-user/environment/pyscripts/twitter_to_es_kibana.py
 ```
