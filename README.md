@@ -142,7 +142,7 @@ Open Kibana and discover the data to begin with, create visualization and add th
 Schedule the script below in crontab to delete the elastic search index daily.
 ```shell
 59 23 * * * /usr/bin/python3 /home/ec2-user/environment/pyscripts/delete_es_index.py
-0 0 * * * /usr/bin/python3 /home/ec2-user/environment/pyscripts/twitter_to_es_kibana.py
+#0 0 * * * /usr/bin/python3 /home/ec2-user/environment/pyscripts/twitter_to_es_kibana.py
 ```
 
 ---
@@ -167,7 +167,7 @@ Create a Kinesis Stream called KunalAWSSentiment-awscloud as mentioned by the va
 
 ### *Run the script twitter_to_kstream.py*
 ```shell
-cd /twitter_realtime_sentiment/pyscripts
+cd twitter_realtime_sentiment/pyscripts
 nohup python3 twitter_to_kstream.py &
 ```
 
@@ -176,3 +176,65 @@ Create a new application named **KunalAWSSentiment-awscloud** and connect to the
 
 ### *Add the Kinesis Analytics SQL*
 From the file **sql/Kinesis_Analytics_KunalAWSSentiment-awscloud.sql** copy the SQL to in application SQL editor, choose save and run to start analyzing real time stream.
+
+### *Assign destination for Kinesis Analytics*
+Assign destination for **KunalAWSSentiment-awscloud** Kinesis Stream by assigning 
+**DESTINATION_SQL_STREAM_SENTIMENT to f_write_Kinesis_Analytics_KunalAWSSentiment-awscloud_senti_to_pg**
+**DESTINATION_SQL_STREAM_SOURCE to f_write_Kinesis_Analytics_KunalAWSSentiment-awscloud_src_to_pg**
+
+### *Create Lambda functions*
+#### *Create Lambda **f_write_Kinesis_Analytics_KunalAWSSentiment-awscloud_senti_to_pg***
+```shell
+cd twitter_realtime_sentiment/lambda
+sudo yum -y install jq
+lambda_name="f_write_Kinesis_Analytics_KunalAWSSentiment-awscloud_senti_to_pg"
+zip_file="${lambda_name}.zip"
+role_arn="arn:aws:iam::<AWS Account Number>:role/Lambda_Admin"
+files="f_write_Kinesis_Analytics_KunalAWSSentiment-awscloud_senti_to_pg.py pgdb_util.py"
+chmod -R 755 ${files}
+zip -r "${zip_file}" psycopg2 psycopg2_binary-2.7.5.dist-info $files
+subnet_ids=`aws ec2 describe-subnets | jq -r '.Subnets|map(.SubnetId)|join(",")'`
+sec_group_id=`aws ec2 describe-security-groups --group-name "default" | jq -r '.SecurityGroups[].GroupId'`
+
+aws lambda create-function \
+--region "us-east-1" \
+--function-name "${lambda_name}"  \
+--zip-file "fileb://${zip_file}" \
+--role "${role_arn}" \
+--handler "${lambda_name}.lambda_handler" \
+--runtime python3.6 \
+--timeout 900 \
+--description "Merge to ods.kunalawssentimentawscloud_senti in Aurora Postgres" \
+--vpc-config SubnetIds="${subnet_ids}",SecurityGroupIds="${sec_group_id}"
+```
+#### *Create Lambda **f_write_Kinesis_Analytics_KunalAWSSentiment-awscloud_src_to_pg***
+```shell
+cd twitter_realtime_sentiment/lambda
+sudo yum -y install jq
+lambda_name="f_write_Kinesis_Analytics_KunalAWSSentiment-awscloud_src_to_pg"
+zip_file="${lambda_name}.zip"
+role_arn="arn:aws:iam::<AWS Account Number>:role/Lambda_Admin"
+files="f_write_Kinesis_Analytics_KunalAWSSentiment-awscloud_src_to_pg.py pgdb_util.py"
+chmod -R 755 ${files}
+zip -r "${zip_file}" psycopg2 psycopg2_binary-2.7.5.dist-info $files
+subnet_ids=`aws ec2 describe-subnets | jq -r '.Subnets|map(.SubnetId)|join(",")'`
+sec_group_id=`aws ec2 describe-security-groups --group-name "default" | jq -r '.SecurityGroups[].GroupId'`
+
+aws lambda create-function \
+--region "us-east-1" \
+--function-name "${lambda_name}"  \
+--zip-file "fileb://${zip_file}" \
+--role "${role_arn}" \
+--handler "${lambda_name}.lambda_handler" \
+--runtime python3.6 \
+--timeout 900 \
+--description "Merge to ods.kunalawssentimentawscloud_source in Aurora Postgres" \
+--vpc-config SubnetIds="${subnet_ids}",SecurityGroupIds="${sec_group_id}"
+```
+### *Create and RDS Aurora Postgres DB*
+Use the AWS Console to create an RDS Aurora Postgres instance, add necessary CIDR ranges to the DB Security groups for access.
+Based the region assign a CIDR range to the DB Security Group
+[AWS Regions and IP Address Ranges](https://docs.aws.amazon.com/quicksight/latest/user/regions.html)
+
+### *Visualize in QuickSight*
+Visualize the realtime dashboards in QuickSight
