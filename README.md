@@ -135,8 +135,11 @@ cd /twitter_realtime_sentiment/pyscripts
 nohup python3 twitter_to_es_kibana.py &
 ```
 
+### *Authenticate Kibana with Cognito* ###
+[Amazon Cognito Authentication for Kibana](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-cognito-auth.html)
+
 ### *Search and visualize the dashboard on Kibana*
-Open Kibana and discover the data to begin with, create visualization and add them to dashboard.
+Log on to the Elastc Search and open the Kibana URL and logon using cognito user and password to discover the data to begin with, create visualization and add them to dashboard.
 
 ### *Housekeep Elastic Search index*
 Schedule the script below in crontab to delete the elastic search index daily.
@@ -237,4 +240,5 @@ Based the region assign a CIDR range to the DB Security Group
 [AWS Regions and IP Address Ranges](https://docs.aws.amazon.com/quicksight/latest/user/regions.html)
 
 ### *Visualize in QuickSight*
-Visualize the realtime dashboards in QuickSight
+Visualize the real time dashboards in QuickSight
+---
