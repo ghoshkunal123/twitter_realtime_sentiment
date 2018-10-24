@@ -33,8 +33,8 @@ def lambda_handler(event, context):
             #print(type(payload_dict))
             process_time=payload_dict['PROCESS_TIME']
             tweet_track=payload_dict['TWEET_TRACK']
-            tweet_source=payload_dict['SENTIMENTS']
-            source_tweets_last_hour=payload_dict['SENTIMENTS_TWEETS_LAST_HOUR']
+            sentiments=payload_dict['SENTIMENTS']
+            sentiments_tweets_last_hour=payload_dict['SENTIMENTS_TWEETS_LAST_HOUR']
             query_cmd = "insert into ods.kunalawssentimentawscloud_senti(process_time,tweet_track,sentiments,sentiments_tweets_last_hour) values('%s','%s', '%s', %d) on conflict(sentiments) do update set process_time = EXCLUDED.process_time, sentiments_tweets_last_hour = EXCLUDED.sentiments_tweets_last_hour where ods.kunalawssentimentawscloud_senti.process_time < EXCLUDED.process_time or (ods.kunalawssentimentawscloud_senti.process_time = EXCLUDED.process_time and ods.kunalawssentimentawscloud_senti.sentiments_tweets_last_hour < EXCLUDED.sentiments_tweets_last_hour);" % (
             process_time, tweet_track, sentiments, sentiments_tweets_last_hour)
             print('query_cmd : {}'.format(query_cmd))
